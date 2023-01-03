@@ -1,8 +1,6 @@
 from datetime import datetime
-from flask import Flask, render_template, request, redirect, url_for, send_from_directory
 from azure.cosmos import CosmosClient, PartitionKey
 from flask import *;
-from datetime import datetime
 
 endpoint = "https://dp420abdul.documents.azure.com:443/"
 key = "S63SFJSI8GMQYbPxO21W9vL4N2D94nFr3yJwyO3ZAf8yhfzefU7XSd7RQ82c1abS5wkTEYz1O0vDACDb8Jp9sg=="
