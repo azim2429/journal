@@ -101,20 +101,21 @@
                     </div>
                     <!-- cards -->
                     <div class="row">
-
+                        {%for i in range(0, len)%}
                         <div class="col-lg-4 col-md-6 mb-4 pt-5">
                             <div class="card shadow-sm border-0">
                                 <div class="card-body">
                                     <div class="user-picture">
-                                        <img src="" class="shadow-sm rounded-circle" height="130"
+                                        <img src="{{ value[i]['mood'] }}" class="shadow-sm rounded-circle" height="130"
                                             width="130" />
 
                                     </div>
                                     <br><br>
                                     <div class="user-content">
-                                        <h3 class="text-capitalize user-name font-weight-bold">
+                                        <h3 class="text-capitalize user-name font-weight-bold">{{ value[i]['Name'] }}
                                         </h3>
-                                        <p class=" text-capitalize text-muted small blockquote-footer"></p>
+                                        <p class=" text-capitalize text-muted small blockquote-footer">{{
+                                            value[i]['dept'] }}</p>
                                         <div class="small">
                                             <i class="fas fa-star text-warning"></i>
                                             <i class="fas fa-star text-warning"></i>
@@ -123,35 +124,35 @@
                                             <i class="fas fa-star text-light"></i>
                                         </div>
                                         <p class="text-muted mb-0 font-weight-bold">
-                                            </p>
+                                            {{ value[i]['notes'] }}</p>
                                     </div>
                                     <br>
-                                    <form  action="http://127.0.0.1:5000/delete" method="post">
+                                    <form  action="{{url_for('delete')}}" method="post">
                                         <input hidden class="form-control" type="text" placeholder="Enter your Name"
-                                            name="userId" value=""
+                                            name="userId" value="{{value[i]['userId']}}"
                                             aria-label="default input example">
 
                                         <button class="btn btn-danger " style="position: absolute;right: 60%;" type="submit" name="delete"
-                                            value="">Delete</button>
+                                            value="{{value[i]['id']}}">Delete</button>
                                     </form>
                                
                                     <form  action="http://127.0.0.1:5000/update" method="post">
                                         <input hidden class="form-control" type="text" placeholder="Enter your Name"
-                                            name="id" value="" aria-label="default input example">
+                                            name="id" value="{{value[i]['id']}}" aria-label="default input example">
                                         <input hidden class="form-control" type="text" placeholder="Enter your Name"
-                                            name="userId" value=""
+                                            name="userId" value="{{value[i]['userId']}}"
                                             aria-label="default input example">
-                                        <button type="submit" style="position: absolute;right: 25%;" value="" class="btn btn-warning"
+                                        <button type="submit" style="position: absolute;right: 25%;" value="{{value[i]['id']}}" class="btn btn-warning"
                                             name="id">Update</button>
                                     </form>
                                 </div>
                                 <br><br>
                                 <p class="small text-muted mb-0 text-center">
-                                    </p>
+                                    {{ value[i]['id'] }}</p>
                                 <br>
                             </div>
                         </div>
-                    
+                        {%endfor%}
                     </div>
 
 

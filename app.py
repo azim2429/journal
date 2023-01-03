@@ -17,23 +17,16 @@ app = Flask(__name__)
 @app.route('/')
 def index():
    print('Request for index page received')
-   return render_template('index.html')
+   value = list(container.read_all_items(max_item_count=10))
+   return render_template('index.html',value=value,len=len(value))
 
-@app.route('/favicon.ico')
-def favicon():
-    return send_from_directory(os.path.join(app.root_path, 'static'),
-                               'favicon.ico', mimetype='image/vnd.microsoft.icon')
-
-@app.route('/hello', methods=['POST'])
-def hello():
-   name = request.form.get('name')
-
-   if name:
-       print('Request for hello page received with name=%s' % name)
-       return render_template('hello.html', name = name)
-   else:
-       print('Request for hello page received with no name or blank name -- redirecting')
-       return redirect(url_for('index'))
+@app.route('/delete',methods = ['POST', 'GET'])  
+def delete():  
+   if request.method == 'POST':
+    id = request.form.get('delete')
+    userId = request.form.get('userId')
+    container.delete_item(id,partition_key=userId)
+    return redirect(url_for('index'))
 
 
 @app.route('/success',methods = ['POST', 'GET'])  
@@ -54,8 +47,6 @@ def success():
         }
       container.create_item(newItem)
       return redirect(url_for('index'))
-
-
 
 if __name__ == '__main__':
    app.run()
