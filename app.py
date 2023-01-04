@@ -28,6 +28,30 @@ def delete():
     container.delete_item(id,partition_key=userId)
     return redirect(url_for('index'))
 
+@app.route("/upsert",methods = ['POST', 'GET'])
+def upsert():
+    if request.method == 'POST':
+        id = request.form.get('id')
+        userId = request.form.get('userId')
+        item = (container.read_item(id,partition_key=userId))
+        item['Name'] = request.form.get('Fname')
+        item['dept'] = request.form.get('dept')
+        item['notes'] = request.form.get('notes')
+        container.upsert_item(body=item)
+        return redirect(url_for('index'))
+
+@app.route('/update',methods = ['POST', 'GET'])  
+def update():  
+   if request.method == 'POST':
+    id = request.form.get('id')
+    userId = request.form.get('userId')
+    item = (container.read_item(id,partition_key=userId))
+    print(item)
+    # item['Name'] = request.form.get('Fname')
+    # item['dept'] = request.form.get('dept')
+    # item['notes'] = request.form.get('notes')
+    # container.upsert_item(body=item)
+    return render_template('update.html',item=item)
 
 @app.route('/success',methods = ['POST', 'GET'])  
 def success():  

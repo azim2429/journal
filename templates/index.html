@@ -136,7 +136,7 @@
                                             value="{{value[i]['id']}}">Delete</button>
                                     </form>
                                
-                                    <form  action="http://127.0.0.1:5000/update" method="post">
+                                    <form  action="{{url_for('update')}}" method="post">
                                         <input hidden class="form-control" type="text" placeholder="Enter your Name"
                                             name="id" value="{{value[i]['id']}}" aria-label="default input example">
                                         <input hidden class="form-control" type="text" placeholder="Enter your Name"
