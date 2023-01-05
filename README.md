@@ -1,7 +1,26 @@
-# Deploy a Python (Flask) web app to Azure App Service - Sample Application
+# Mood Journal 📖 
+This is a simple flask application which tracks the mood of different people.
 
-This is the sample Flask application for the Azure Quickstart [Deploy a Python (Django or Flask) web app to Azure App Service](https://docs.microsoft.com/en-us/azure/app-service/quickstart-python).  For instructions on how to create the Azure resources and deploy the application to Azure, refer to the Quickstart article.
+### Tech Used
 
-A Django sample application is also available for the article at [https://github.com/Azure-Samples/msdocs-python-django-webapp-quickstart](https://github.com/Azure-Samples/msdocs-python-django-webapp-quickstart).
+* Frontend - HTML/CSS and Bootstrap
+* Backend - Flask
+* Database - Azure Cosmos DB (NoSQL)
+* Hosting - Azure App Service
 
-If you need an Azure account, you can [create on for free](https://azure.microsoft.com/en-us/free/).
+## You can view website here
+ ### <pre><a href="https://journal-addend.azurewebsites.net/">Mood Journal 📖</a></pre>
+
+## Features of Mood Journal
+
+Performs Create,Update and Delete Operations in COSMOS DB with the help of python function.
+
+## Author
+
+👨‍💻 **Abdul Azim**
+
+* Github: [Abdul Azim](https://github.com/azim2429)
+
+## Show your support
+
+Give a ⭐️ if this project helped you!
