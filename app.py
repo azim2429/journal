@@ -47,6 +47,7 @@ def upsert():
         item['Name'] = request.form.get('Fname')
         item['dept'] = request.form.get('dept')
         item['notes'] = request.form.get('notes')
+        item['last_updated'] = str(datetime.now().strftime('%Y/%m/%d %I:%M:%S'))
 
         querystring = {"text":item['notes']}
         response = requests.request("GET", url, headers=headers, params=querystring)
@@ -76,11 +77,6 @@ def update():
     id = request.form.get('id')
     userId = request.form.get('userId')
     item = (container.read_item(id,partition_key=userId))
-    print(item)
-    # item['Name'] = request.form.get('Fname')
-    # item['dept'] = request.form.get('dept')
-    # item['notes'] = request.form.get('notes')
-    # container.upsert_item(body=item)
     return render_template('update.html',item=item)
 
 @app.route('/success',methods = ['POST', 'GET'])  
@@ -113,6 +109,7 @@ def success():
       if(var['sentiment']=='WEAK_POSITIVE'):
         mood = 'https://img.icons8.com/emoji/512/smiling-face-with-smiling-eyes.png'
 
+      
       newItem = {
         "id": str(datetime.now()),
         "userId": userID,
@@ -120,7 +117,8 @@ def success():
         "dept": dept,
         "notes": notes,
         "mood":mood,
-        "mood_res":var['sentiment']
+        "mood_res":var['sentiment'],
+        "last_updated":str(datetime.now().strftime('%Y/%m/%d %I:%M:%S'))
         }
       container.create_item(newItem)
       return redirect(url_for('index'))
