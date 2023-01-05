@@ -1,16 +1,26 @@
 from datetime import datetime
 from azure.cosmos import CosmosClient, PartitionKey
 from flask import *;
+import requests
+import simplejson as json
+
+
+
 
 endpoint = "https://dp420abdul.documents.azure.com:443/"
 key = "S63SFJSI8GMQYbPxO21W9vL4N2D94nFr3yJwyO3ZAf8yhfzefU7XSd7RQ82c1abS5wkTEYz1O0vDACDb8Jp9sg=="
+url = "https://sentiment-by-api-ninjas.p.rapidapi.com/v1/sentiment"
 
 client = CosmosClient(url=endpoint, credential=key)
+
+headers = {
+	"X-RapidAPI-Key": "9912cc18d7mshba16d59b04a871bp1584a1jsne756fb362b2c",
+	"X-RapidAPI-Host": "sentiment-by-api-ninjas.p.rapidapi.com"
+}
 
 
 database = client.get_database_client('journalapp')
 container = database.get_container_client('user_details')
-
 
 app = Flask(__name__)
 
@@ -37,6 +47,26 @@ def upsert():
         item['Name'] = request.form.get('Fname')
         item['dept'] = request.form.get('dept')
         item['notes'] = request.form.get('notes')
+
+        querystring = {"text":item['notes']}
+        response = requests.request("GET", url, headers=headers, params=querystring)
+        var = (json.loads(response.text))
+
+        if(var['sentiment']=='NEUTRAL'):
+          item['mood'] = 'https://img.icons8.com/emoji/512/neutral-face.png'
+      
+        if(var['sentiment']=='POSITIVE'):
+          item['mood'] = 'https://img.icons8.com/emoji/512/star-struck.png'
+
+        if(var['sentiment']=='NEGATIVE'):
+          item['mood'] = 'https://img.icons8.com/emoji/512/weary-face.png'
+
+        if(var['sentiment']=='WEAK_NEGATIVE'):
+          item['mood'] = 'https://img.icons8.com/emoji/512/pensive-face.png'
+      
+        if(var['sentiment']=='WEAK_POSITIVE'):
+          item['mood'] = 'https://img.icons8.com/emoji/512/smiling-face-with-smiling-eyes.png'
+
         container.upsert_item(body=item)
         return redirect(url_for('index'))
 
@@ -59,15 +89,38 @@ def success():
       fname = request.form.get('Fname')
       dept = request.form.get('dept')
       notes = request.form.get('notes')
-      mood = request.form.get('mood')
       userID = str(datetime.now()) + fname
+
+      querystring = {"text":notes}
+      response = requests.request("GET", url, headers=headers, params=querystring)
+      var = (json.loads(response.text))
+
+      if(dept == 'Select your Department'):
+         dept = 'Other'
+
+      if(var['sentiment']=='NEUTRAL'):
+        mood = 'https://img.icons8.com/emoji/512/neutral-face.png'
+      
+      if(var['sentiment']=='POSITIVE'):
+        mood = 'https://img.icons8.com/emoji/512/star-struck.png'
+
+      if(var['sentiment']=='NEGATIVE'):
+        mood = 'https://img.icons8.com/emoji/512/weary-face.png'
+
+      if(var['sentiment']=='WEAK_NEGATIVE'):
+        mood = 'https://img.icons8.com/emoji/512/pensive-face.png'
+      
+      if(var['sentiment']=='WEAK_POSITIVE'):
+        mood = 'https://img.icons8.com/emoji/512/smiling-face-with-smiling-eyes.png'
+
       newItem = {
         "id": str(datetime.now()),
         "userId": userID,
         "Name":fname,
         "dept": dept,
-        "mood": mood,
-        "notes": notes
+        "notes": notes,
+        "mood":mood,
+        "mood_res":var['sentiment']
         }
       container.create_item(newItem)
       return redirect(url_for('index'))
