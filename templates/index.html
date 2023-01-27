@@ -20,16 +20,15 @@
         <div class="container">
             <div class="row mb-4">
                 <div class="col text-right">
-                    <a href="#" class="btn btn-lg btn-primary" data-toggle="modal" data-target="#largeModal">Mood
+                    <a href="#" class="btn btn-lg btn-primary" data-toggle="modal" data-target="#largeModal">Create your
+                        Mood
                         Journal</a>
                 </div>
             </div>
         </div>
-
-        <!-- large modal -->
         <div class="modal fade" id="largeModal" tabindex="-1" role="dialog" aria-labelledby="basicModal"
             aria-hidden="true">
-            <div class="modal-dialog modal-lg">
+            <div class="modal-dialog modal-sm">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h4 class="modal-title" id="myModalLabel">Mood Check-In</h4>
@@ -42,32 +41,20 @@
                                     aria-label="default input example" required>
                             </div>
                             <div class="mb-3">
+                                <label for="exampleFormControlTextarea1" class="form-label-sm">What made your mood?</label>
                                 <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example"
                                     name="dept" required>
-                                    <option selected>Select your Department</option>
-                                    <option value="DE">Data Engineer</option>
-                                    <option value="DA">Data Analytics</option>
-                                    <option value="ERP">ERP Developer</option>
-                                    <option value="HR">Human Resource</option>
+                                    <option value="Education">Education 📚</option>
+                                    <option value="Work">Work  👨‍💻</option>
+                                    <option value="Family">Family 👪</option>
+                                    <option value="Relationship">Relationship 🧑‍🤝‍🧑</option>
+                                    <option value="Food">Food 🍽️</option>
+                                    <option value="Travellling">Travellling 🧳</option>
+                                    <option value="Friends">Friends 🫂</option>
+                                    <option value="Exercise">Exercise 🏋️‍♂️</option>
                                     <option value="Other">Other</option>
                                 </select>
                             </div>
-                            <!-- <div class="mb-3">
-                                <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example"
-                                    name="mood" required>
-                                    <option selected>Select your Mood</option>
-                                    <option value="https://img.icons8.com/emoji/512/weary-face.png">Really Terrible
-                                    </option>
-                                    <option value="https://img.icons8.com/emoji/512/pensive-face.png">Somewhat Bad
-                                    </option>
-                                    <option value="https://img.icons8.com/emoji/512/slightly-smiling-face.png">
-                                        Completely Okay</option>
-                                    <option value="https://img.icons8.com/emoji/512/smiling-face-with-smiling-eyes.png">
-                                        Pretty Good</option>
-                                    <option value="https://img.icons8.com/emoji/512/star-struck.png">Super Awesome
-                                    </option>
-                                </select>
-                            </div> -->
                             <div class="mb-4">
                                 <label for="exampleFormControlTextarea1" class="form-label-sm">What is in your
                                     mind?</label>
@@ -85,21 +72,15 @@
             </div>
         </div>
 
-
-        <!-- update modal -->
-
         <main>
-            <!-- Ui cards -->
             <section id="cards">
                 <div class="container py-2">
                     <div class="row pb-4">
                         <div class="col-12 text-center">
-                            <div class="display-3">Addend's Journal</div>
+                            <div class="display-3">Today's Journal</div>
                             <br><br>
                         </div>
-
                     </div>
-                    <!-- cards -->
                     <div class="row">
                         {%for i in range(0, len)%}
                         <div class="col-lg-4 col-md-6 mb-4 pt-5">
@@ -108,7 +89,6 @@
                                     <div class="user-picture">
                                         <img src="{{ value[i]['mood'] }}" class="shadow-sm rounded-circle" height="130"
                                             width="130" />
-
                                     </div>
                                     <br><br>
                                     <div class="user-content">
@@ -127,23 +107,22 @@
                                             {{ value[i]['notes'] }}</p>
                                     </div>
                                     <br>
-                                    <form  action="{{url_for('delete')}}" method="post">
+                                    <form action="{{url_for('delete')}}" method="post">
                                         <input hidden class="form-control" type="text" placeholder="Enter your Name"
                                             name="userId" value="{{value[i]['userId']}}"
                                             aria-label="default input example">
 
-                                        <button class="btn btn-danger " style="position: absolute;right: 60%;" type="submit" name="delete"
-                                            value="{{value[i]['id']}}">Delete</button>
+                                        <button class="btn btn-danger " style="position: absolute;right: 60%;"
+                                            type="submit" name="delete" value="{{value[i]['id']}}">Delete</button>
                                     </form>
-                               
-                                    <form  action="{{url_for('update')}}" method="post">
+                                    <form action="{{url_for('update')}}" method="post">
                                         <input hidden class="form-control" type="text" placeholder="Enter your Name"
                                             name="id" value="{{value[i]['id']}}" aria-label="default input example">
                                         <input hidden class="form-control" type="text" placeholder="Enter your Name"
                                             name="userId" value="{{value[i]['userId']}}"
                                             aria-label="default input example">
-                                        <button type="submit" style="position: absolute;right: 25%;" value="{{value[i]['id']}}" class="btn btn-warning"
-                                            name="id">Update</button>
+                                        <button type="submit" style="position: absolute;right: 25%;"
+                                            value="{{value[i]['id']}}" class="btn btn-warning" name="id">Update</button>
                                     </form>
                                 </div>
                                 <br><br>
@@ -154,22 +133,15 @@
                         </div>
                         {%endfor%}
                     </div>
-
-
                 </div>
-
-                <!-- /cards -->
             </section>
-            <!-- /Ui cards -->
         </main>
-
     </body>
 </body>
 
 </html>
 
 <style>
-    /* ==== Cards using Bootstrap === */
     #cards .card {
         border-radius: 20px;
         min-height: 100%;
