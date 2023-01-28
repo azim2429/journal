@@ -5,24 +5,55 @@ import requests
 import simplejson as json
 
 
-endpoint = "https://dp420abdul.documents.azure.com:443/"
-key = "S63SFJSI8GMQYbPxO21W9vL4N2D94nFr3yJwyO3ZAf8yhfzefU7XSd7RQ82c1abS5wkTEYz1O0vDACDb8Jp9sg=="
-url = "https://sentiment-by-api-ninjas.p.rapidapi.com/v1/sentiment"
+# Secret for Cosmos DB
+url_access_token = "https://login.microsoftonline.com/6f28e5b8-67fe-4207-a048-cc17b8e13499/oauth2/v2.0/token"
+payload = 'grant_type=client_credentials&client_id=db3c96e7-ae46-4d9c-a65c-16078c15cb94&client_secret=en78Q~eon6EF5lgfdM2-urI5-4jns1yart.J4aj3&scope=https%3A%2F%2Fvault.azure.net%2F.default'
+headers_access_token = {
+    'Content-Type': 'application/x-www-form-urlencoded',
+    'Cookie': 'fpc=AkJAfn7l3j1Pi9aeBcxoF6mKGKpcAgAAALvVZdsOAAAA; stsservicecookie=estsfd; x-ms-gateway-slice=estsfd'
+}
 
-client = CosmosClient(url=endpoint, credential=key)
+response_access_token = requests.request(
+    "POST", url_access_token, headers=headers_access_token, data=payload)
 
-headers = {
-	"X-RapidAPI-Key": "9912cc18d7mshba16d59b04a871bp1584a1jsne756fb362b2c",
+bearer_token = (json.loads(response_access_token.text)['access_token'])
+
+
+# Connect to Cosmos Client
+url_cosmos = "https://azimkeyvault.vault.azure.net/secrets/cosmoskey/877b5070a02d4be3ae6725a6ccdc3e1c?api-version=7.3"
+endpoint_cosmos = "https://dp420abdul.documents.azure.com:443/"
+headers_cosmos = {
+    'Authorization': 'Bearer ' + bearer_token
+}
+
+response_secret = requests.request("GET", url_cosmos, headers=headers_cosmos)
+cosmos_secret_key = (json.loads(response_secret.text)['value'])
+client = CosmosClient(url=endpoint_cosmos, credential=cosmos_secret_key)
+
+
+# Sentiment
+url_sentiment = "https://sentiment-by-api-ninjas.p.rapidapi.com/v1/sentiment"
+url_sentiment_key = "https://azimkeyvault.vault.azure.net/secrets/nlpkey/c66457d980e14cdd9a7b3ebe90a200b0?api-version=7.3"
+headers_sentiment_key = {
+    'Authorization': 'Bearer ' + bearer_token
+}
+
+response_sentiment = requests.request(
+    "GET", url_sentiment_key, headers=headers_sentiment_key)
+sentiment_key = (json.loads(response_sentiment.text)['value'])
+
+headers_sentiment = {
+	"X-RapidAPI-Key": sentiment_key,
 	"X-RapidAPI-Host": "sentiment-by-api-ninjas.p.rapidapi.com"
 }
 
 
+# Read database and container
 database = client.get_database_client('journalapp')
 container = database.get_container_client('user_details')
 
+
 app = Flask(__name__)
-
-
 @app.route('/')
 def index():
    value = list(container.read_all_items(max_item_count=50))
@@ -52,7 +83,7 @@ def upsert():
 
         querystring = {"text": item['notes']}
         response = requests.request(
-            "GET", url, headers=headers, params=querystring)
+            "GET", url_sentiment, headers=headers_sentiment, params=querystring)
         var = (json.loads(response.text))
 
         if (var['sentiment'] == 'NEUTRAL'):
@@ -92,7 +123,7 @@ def success():
 
       querystring = {"text": notes}
       response = requests.request(
-          "GET", url, headers=headers, params=querystring)
+          "GET", url_sentiment, headers=headers_sentiment, params=querystring)
       var = (json.loads(response.text))
 
       if (dept == 'Select your Department'):
