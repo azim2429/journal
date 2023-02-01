@@ -120,7 +120,9 @@ def success():
       fname = request.form.get('Fname')
       dept = request.form.get('dept')
       notes = request.form.get('notes')
-
+      new_1 = request.form.get('1')
+      new_2 = request.form.get('2')
+      new_3 = request.form.get('3')
       querystring = {"text": notes}
       response = requests.request(
           "GET", url_sentiment, headers=headers_sentiment, params=querystring)
@@ -154,6 +156,15 @@ def success():
           "mood_res": var['sentiment'],
           "last_updated": str(datetime.now().strftime('%Y/%m/%d %I:%M:%S'))
       }
+      if(new_1 is not None):
+        newItem['text_1'] = new_1
+      
+      if(new_2 is not None):
+        newItem['text_2'] = new_2
+
+      if(new_3 is not None):
+        newItem['text_3'] = new_3
+
       container.create_item(newItem)
       return redirect(url_for('index'))
 

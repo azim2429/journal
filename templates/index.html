@@ -61,6 +61,12 @@
                                 <textarea required class="form-control" id="exampleFormControlTextarea1" rows="1"
                                     name="notes"></textarea>
                             </div>
+                            <div id='input-cont' class="mb-3">
+                                <button class="btn btn-success" onclick='addInput()' type="button">+ Add input</button>
+                                <button class="btn btn-warning" onclick='removeInput()' type="button">- Remove input</button>
+
+                            </div>
+                            <br>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-danger" data-dismiss="modal">Discard</button>
                                 <button class="btn btn-primary" role="button" type="submit">Save</button>
@@ -167,3 +173,37 @@
         margin-left: 5%;
     }
 </style>
+
+<script>
+    const container = document.getElementById('input-cont');
+    var inputCount = 0;
+    let linebreak = document.createElement('br');
+
+    // Call addInput() function on button click
+    function addInput(){
+        inputCount++;
+        if(inputCount>3){
+        alert('You can add maximum 3 input fields.');
+        return;
+    }
+        let input = document.createElement('input');
+        input.placeholder = 'Some important notes';
+        input.name = inputCount;
+        input.id = inputCount
+        input.className = 'form-control';
+        input.style.marginBottom = '10px'
+        input.style.marginTop = '10px'
+        container.appendChild(input);
+        console.log(inputCount)
+        }
+
+    function removeInput(){
+        if(inputCount==0){
+        alert('Please add first');
+        return;
+    }
+        const element = document.getElementById(inputCount);
+        element.remove();
+        inputCount--;
+    }
+</script>
